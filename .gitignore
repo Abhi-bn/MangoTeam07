@@ -27,3 +27,7 @@ apache-ant-1.10.13/
 apache-tomcat-9.0.73/
 
 jdk1.8.0_202
+
+*.dat
+
+*.build.properties

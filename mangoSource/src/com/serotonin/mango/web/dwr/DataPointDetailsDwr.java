@@ -49,6 +49,7 @@ import com.serotonin.web.dwr.DwrResponseI18n;
 import com.serotonin.web.dwr.MethodFilter;
 import com.serotonin.web.i18n.LocalizableMessage;
 import com.serotonin.web.taglib.DateFunctions;
+import com.serotonin.mango.DataTypes;
 
 public class DataPointDetailsDwr extends BaseDwr {
     @MethodFilter
@@ -89,6 +90,12 @@ public class DataPointDetailsDwr extends BaseDwr {
         List<RenderedPointValueTime> renderedData = new ArrayList<RenderedPointValueTime>(rawData.size());
 
         for (PointValueTime pvt : rawData) {
+            if (pvt != null) {
+                if (DataTypes.getDataType(pvt.getValue()) == DataTypes.NUMERIC) {
+                    String str = String.format("%1.2f", pvt.getValue().getDoubleValue());
+                    pvt = new PointValueTime(Double.valueOf(str), pvt.getTime());
+                }
+            }
             RenderedPointValueTime rpvt = new RenderedPointValueTime();
             rpvt.setValue(Functions.getHtmlText(pointVO, pvt));
             rpvt.setTime(Functions.getTime(pvt));

@@ -62,6 +62,7 @@ import com.serotonin.web.content.ContentGenerator;
 import com.serotonin.web.dwr.MethodFilter;
 import com.serotonin.web.i18n.I18NUtils;
 import com.serotonin.web.i18n.LocalizableMessage;
+import com.serotonin.mango.DataTypes;
 
 abstract public class BaseDwr {
     public static final String MODEL_ATTR_EVENTS = "events";
@@ -124,6 +125,12 @@ abstract public class BaseDwr {
 
     protected void setPrettyText(WatchListState state, DataPointVO pointVO, Map<String, Object> model,
             PointValueTime pointValue) {
+        if (pointValue != null) {
+            if (DataTypes.getDataType(pointValue.getValue()) == DataTypes.NUMERIC) {
+                String str = String.format("%1.2f", pointValue.getValue().getDoubleValue());
+                pointValue = new PointValueTime(Double.valueOf(str), pointValue.getTime());
+            }
+        }
         String prettyText = Functions.getHtmlText(pointVO, pointValue);
         model.put("text", prettyText);
         if (!ObjectUtils.isEqual(pointVO.lastValue(), pointValue)) {

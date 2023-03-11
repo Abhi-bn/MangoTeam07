@@ -62,7 +62,6 @@ import com.serotonin.web.content.ContentGenerator;
 import com.serotonin.web.dwr.MethodFilter;
 import com.serotonin.web.i18n.I18NUtils;
 import com.serotonin.web.i18n.LocalizableMessage;
-import com.serotonin.mango.DataTypes;
 
 abstract public class BaseDwr {
     public static final String MODEL_ATTR_EVENTS = "events";
@@ -79,10 +78,12 @@ abstract public class BaseDwr {
     protected ResourceBundle chartSnippetMap = ResourceBundle.getBundle("chartSnippetMap");
 
     /**
-     * Base method for preparing information in a state object and returning a point value.
+     * Base method for preparing information in a state object and returning a point
+     * value.
      * 
      * @param componentId
-     *            a unique id for the browser side component. Required for set point snippets.
+     *                    a unique id for the browser side component. Required for
+     *                    set point snippets.
      * @param state
      * @param point
      * @param status
@@ -169,7 +170,8 @@ abstract public class BaseDwr {
     }
 
     /**
-     * Allows the setting of a given data point. Used by the watch list and point details pages. Views implement their
+     * Allows the setting of a given data point. Used by the watch list and point
+     * details pages. Views implement their
      * own version to accommodate anonymous users.
      * 
      * @param pointId
@@ -301,11 +303,9 @@ abstract public class BaseDwr {
     public static String generateContent(HttpServletRequest request, String snippet, Map<String, Object> model) {
         try {
             return ContentGenerator.generateContent(request, "/WEB-INF/snippet/" + snippet, model);
-        }
-        catch (ServletException e) {
+        } catch (ServletException e) {
             throw new ShouldNeverHappenException(e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new ShouldNeverHappenException(e);
         }
     }
@@ -328,8 +328,7 @@ abstract public class BaseDwr {
         try {
             if (!none)
                 dt = new DateTime(year, month, day, hour, minute, second, 0);
-        }
-        catch (IllegalFieldValueException e) {
+        } catch (IllegalFieldValueException e) {
             dt = new DateTime();
         }
         return dt;

@@ -125,12 +125,6 @@ abstract public class BaseDwr {
 
     protected void setPrettyText(WatchListState state, DataPointVO pointVO, Map<String, Object> model,
             PointValueTime pointValue) {
-        if (pointValue != null) {
-            if (DataTypes.getDataType(pointValue.getValue()) == DataTypes.NUMERIC) {
-                String str = String.format("%1.2f", pointValue.getValue().getDoubleValue());
-                pointValue = new PointValueTime(Double.valueOf(str), pointValue.getTime());
-            }
-        }
         String prettyText = Functions.getHtmlText(pointVO, pointValue);
         model.put("text", prettyText);
         if (!ObjectUtils.isEqual(pointVO.lastValue(), pointValue)) {

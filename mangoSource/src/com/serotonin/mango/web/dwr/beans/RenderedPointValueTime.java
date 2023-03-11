@@ -18,6 +18,11 @@
  */
 package com.serotonin.mango.web.dwr.beans;
 
+import com.serotonin.mango.web.taglib.Functions;
+import com.serotonin.mango.DataTypes;
+import com.serotonin.mango.rt.dataImage.PointValueTime;
+import com.serotonin.mango.vo.DataPointVO;
+
 /**
  * @author Matthew Lohbihler
  */
@@ -26,8 +31,15 @@ public class RenderedPointValueTime {
     private String time;
     private String annotation;
 
-    public RenderedPointValueTime() {
-        // no op
+    public RenderedPointValueTime(DataPointVO pointVO, PointValueTime pointValue) {
+        if (pointValue != null) {
+            if (DataTypes.getDataType(pointValue.getValue()) == DataTypes.NUMERIC) {
+                String str = String.format("%1.2f", pointValue.getValue().getDoubleValue());
+                pointValue = new PointValueTime(Double.valueOf(str), pointValue.getTime());
+            }
+        }
+        this.value = Functions.getHtmlText(pointVO, pointValue);
+        this.time = Functions.getTime(pointValue);
     }
 
     public RenderedPointValueTime(String value, String time, String annotation) {

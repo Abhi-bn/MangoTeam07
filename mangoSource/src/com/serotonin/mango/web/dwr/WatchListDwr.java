@@ -258,6 +258,17 @@ public class WatchListDwr extends BaseDwr {
         new WatchListDao().saveWatchList(watchList);
     }
 
+    @Override
+    protected void setPrettyText(WatchListState state, DataPointVO pointVO, java.util.Map<String,Object> model, PointValueTime pointValue) {
+        if (pointValue != null) {
+            if (DataTypes.getDataType(pointValue.getValue()) == DataTypes.NUMERIC) {
+                String str = String.format("%1.2f", pointValue.getValue().getDoubleValue());
+                pointValue = new PointValueTime(Double.valueOf(str), pointValue.getTime());
+            }
+        }
+        super.setPrettyText(state, pointVO, model, pointValue);
+    }
+
     /**
      * Convenience method for creating a populated view state.
      */

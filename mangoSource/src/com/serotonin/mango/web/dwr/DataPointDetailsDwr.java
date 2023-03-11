@@ -53,7 +53,8 @@ import com.serotonin.web.taglib.DateFunctions;
 public class DataPointDetailsDwr extends BaseDwr {
     @MethodFilter
     public WatchListState getPointData() {
-        // Get the point from the user's session. It should have been set by the controller.
+        // Get the point from the user's session. It should have been set by the
+        // controller.
         HttpServletRequest request = WebContextFactory.get().getHttpServletRequest();
         User user = Common.getUser(request);
         DataPointVO pointVO = user.getEditPoint();
@@ -89,9 +90,7 @@ public class DataPointDetailsDwr extends BaseDwr {
         List<RenderedPointValueTime> renderedData = new ArrayList<RenderedPointValueTime>(rawData.size());
 
         for (PointValueTime pvt : rawData) {
-            RenderedPointValueTime rpvt = new RenderedPointValueTime();
-            rpvt.setValue(Functions.getHtmlText(pointVO, pvt));
-            rpvt.setTime(Functions.getTime(pvt));
+            RenderedPointValueTime rpvt = new RenderedPointValueTime(pointVO, pvt);
             if (pvt.isAnnotated()) {
                 AnnotatedPointValueTime apvt = (AnnotatedPointValueTime) pvt;
                 rpvt.setAnnotation(apvt.getAnnotation(getResourceBundle()));
@@ -135,7 +134,8 @@ public class DataPointDetailsDwr extends BaseDwr {
 
     @MethodFilter
     public void getChartData(int fromYear, int fromMonth, int fromDay, int fromHour, int fromMinute, int fromSecond,
-            boolean fromNone, int toYear, int toMonth, int toDay, int toHour, int toMinute, int toSecond, boolean toNone) {
+            boolean fromNone, int toYear, int toMonth, int toDay, int toHour, int toMinute, int toSecond,
+            boolean toNone) {
         DateTime from = createDateTime(fromYear, fromMonth, fromDay, fromHour, fromMinute, fromSecond, fromNone);
         DateTime to = createDateTime(toYear, toMonth, toDay, toHour, toMinute, toSecond, toNone);
         DataExportDefinition def = new DataExportDefinition(new int[] { getDataPointVO().getId() }, from, to);

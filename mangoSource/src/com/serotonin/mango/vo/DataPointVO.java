@@ -637,30 +637,27 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
         SerializationHelper.writeSafeUTF(out, chartColour);
     }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        int ver = in.readInt();
+    private void readObjectImp_v1(ObjectInputStream in){
+        name = SerializationHelper.readSafeUTF(in);
+        deviceName = null;
+        enabled = in.readBoolean();
+        pointFolderId = 0;
+        loggingType = in.readInt();
+        intervalLoggingPeriodType = Common.TimePeriods.MINUTES;
+        intervalLoggingPeriod = 15;
+        intervalLoggingType = IntervalLoggingTypes.INSTANT;
+        tolerance = in.readDouble();
+        purgeType = in.readInt();
+        purgePeriod = in.readInt();
+        textRenderer = (TextRenderer) in.readObject();
+        chartRenderer = (ChartRenderer) in.readObject();
+        pointLocator = (PointLocatorVO) in.readObject();
+        defaultCacheSize = 0;
+        engineeringUnits = ENGINEERING_UNITS_DEFAULT;
+        chartColour = null;
+    }
 
-        // Switch on the version of the class so that version changes can be elegantly handled.
-        if (ver == 1) {
-            name = SerializationHelper.readSafeUTF(in);
-            deviceName = null;
-            enabled = in.readBoolean();
-            pointFolderId = 0;
-            loggingType = in.readInt();
-            intervalLoggingPeriodType = Common.TimePeriods.MINUTES;
-            intervalLoggingPeriod = 15;
-            intervalLoggingType = IntervalLoggingTypes.INSTANT;
-            tolerance = in.readDouble();
-            purgeType = in.readInt();
-            purgePeriod = in.readInt();
-            textRenderer = (TextRenderer) in.readObject();
-            chartRenderer = (ChartRenderer) in.readObject();
-            pointLocator = (PointLocatorVO) in.readObject();
-            defaultCacheSize = 0;
-            engineeringUnits = ENGINEERING_UNITS_DEFAULT;
-            chartColour = null;
-        }
-        else if (ver == 2) {
+    private void readObjectImp_v2(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -686,8 +683,9 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             defaultCacheSize = 0;
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 3) {
+    }
+
+    private void readObjectImp_v3(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -713,8 +711,9 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             defaultCacheSize = in.readInt();
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 4) {
+    }
+
+        private void readObjectImp_v4(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -740,8 +739,10 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             defaultCacheSize = in.readInt();
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
+
         }
-        else if (ver == 5) {
+
+        private void readObjectImp_v5(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -763,7 +764,8 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
         }
-        else if (ver == 6) {
+
+        private void readObjectImp_v6(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -785,7 +787,8 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             engineeringUnits = in.readInt();
             chartColour = null;
         }
-        else if (ver == 7) {
+
+        private void readObjectImp_v7(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -807,7 +810,8 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             engineeringUnits = in.readInt();
             chartColour = SerializationHelper.readSafeUTF(in);
         }
-        else if (ver == 8) {
+
+        private void readObjectImp_v8(ObjectInputStream in) throws IOException{
             name = SerializationHelper.readSafeUTF(in);
             deviceName = SerializationHelper.readSafeUTF(in);
             enabled = in.readBoolean();
@@ -828,6 +832,36 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             discardHighLimit = in.readDouble();
             engineeringUnits = in.readInt();
             chartColour = SerializationHelper.readSafeUTF(in);
+        }
+
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        int ver = in.readInt();
+
+        // Switch on the version of the class so that version changes can be elegantly handled.
+        if (ver == 1) {
+            readObjectImp_v1(in);
+        }
+        else if (ver == 2) {
+            readObjectImp_v2(in);
+        }
+        else if (ver == 3) {
+            readObjectImp_v3(in);
+        }
+        else if (ver == 4) {
+            readObjectImp_v3(in);
+        }
+        else if (ver == 5) {
+            readObjectImp_v3(in);
+        }
+        else if (ver == 6) {
+            readObjectImp_v3(in);
+        }
+        else if (ver == 7) {
+            readObjectImp_v3(in);
+        }
+        else if (ver == 8) {
+            readObjectImp_v3(in);
         }
 
         // Check the purge type. Weird how this could have been set to 0.

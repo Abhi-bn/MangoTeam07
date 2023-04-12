@@ -58,6 +58,7 @@ import com.serotonin.util.SerializationHelper;
 import com.serotonin.util.StringUtils;
 import com.serotonin.web.dwr.DwrResponseI18n;
 import com.serotonin.web.i18n.LocalizableMessage;
+import com.serotonin.mango.vo.IntervalLoggingTypes;
 
 @JsonRemoteEntity
 public class DataPointVO implements Serializable, Cloneable, JsonSerializable, ChangeComparable<DataPointVO> {
@@ -86,13 +87,6 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
         int WEEKS = Common.TimePeriods.WEEKS;
         int MONTHS = Common.TimePeriods.MONTHS;
         int YEARS = Common.TimePeriods.YEARS;
-    }
-
-    public interface IntervalLoggingTypes {
-        int INSTANT = 1;
-        int MAXIMUM = 2;
-        int MINIMUM = 3;
-        int AVERAGE = 4;
     }
 
     private static final ExportCodes INTERVAL_LOGGING_TYPE_CODES = new ExportCodes();
@@ -190,8 +184,10 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
     // Runtime data
     //
     /*
-     * This is used by the watch list and graphic views to cache the last known value for a point to determine if the
-     * browser side needs to be refreshed. Initially set to this value so that point views will update (since null
+     * This is used by the watch list and graphic views to cache the last known
+     * value for a point to determine if the
+     * browser side needs to be refreshed. Initially set to this value so that point
+     * views will update (since null
      * values in this case do in fact equal each other).
      */
     private PointValueTime lastValue = new PointValueTime((MangoValue) null, -1);
@@ -217,17 +213,18 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             textRenderer = new PlainRenderer("");
         else {
             switch (pointLocator.getDataTypeId()) {
-            case DataTypes.IMAGE:
-                textRenderer = new NoneRenderer();
-                break;
-            default:
-                textRenderer = new PlainRenderer("");
+                case DataTypes.IMAGE:
+                    textRenderer = new NoneRenderer();
+                    break;
+                default:
+                    textRenderer = new PlainRenderer("");
             }
         }
     }
 
     /*
-     * This value is used by the watchlists. It is set when the watchlist is loaded to determine if the user is allowed
+     * This value is used by the watchlists. It is set when the watchlist is loaded
+     * to determine if the user is allowed
      * to set the point or not based upon various conditions.
      */
     private boolean settable;
@@ -526,8 +523,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
     public DataPointVO copy() {
         try {
             return (DataPointVO) super.clone();
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw new ShouldNeverHappenException(e);
         }
     }
@@ -590,8 +586,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
         if (!StringUtils.isEmpty(chartColour)) {
             try {
                 ColorUtils.toColor(chartColour);
-            }
-            catch (InvalidArgumentException e) {
+            } catch (InvalidArgumentException e) {
                 response.addContextualMessage("chartColour", "validate.invalidValue");
             }
         }
@@ -640,7 +635,8 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         int ver = in.readInt();
 
-        // Switch on the version of the class so that version changes can be elegantly handled.
+        // Switch on the version of the class so that version changes can be elegantly
+        // handled.
         if (ver == 1) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
@@ -659,8 +655,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             defaultCacheSize = 0;
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 2) {
+        } else if (ver == 2) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -675,19 +670,18 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             textRenderer = (TextRenderer) in.readObject();
             chartRenderer = (ChartRenderer) in.readObject();
 
-            // The spinwave changes were not correctly implemented, so we need to handle potential errors here.
+            // The spinwave changes were not correctly implemented, so we need to handle
+            // potential errors here.
             try {
                 pointLocator = (PointLocatorVO) in.readObject();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Turn this guy off.
                 enabled = false;
             }
             defaultCacheSize = 0;
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 3) {
+        } else if (ver == 3) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -702,19 +696,18 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             textRenderer = (TextRenderer) in.readObject();
             chartRenderer = (ChartRenderer) in.readObject();
 
-            // The spinwave changes were not correctly implemented, so we need to handle potential errors here.
+            // The spinwave changes were not correctly implemented, so we need to handle
+            // potential errors here.
             try {
                 pointLocator = (PointLocatorVO) in.readObject();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Turn this guy off.
                 enabled = false;
             }
             defaultCacheSize = in.readInt();
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 4) {
+        } else if (ver == 4) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -729,19 +722,18 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             textRenderer = (TextRenderer) in.readObject();
             chartRenderer = (ChartRenderer) in.readObject();
 
-            // The spinwave changes were not correctly implemented, so we need to handle potential errors here.
+            // The spinwave changes were not correctly implemented, so we need to handle
+            // potential errors here.
             try {
                 pointLocator = (PointLocatorVO) in.readObject();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Turn this guy off.
                 enabled = false;
             }
             defaultCacheSize = in.readInt();
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 5) {
+        } else if (ver == 5) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -762,8 +754,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             discardHighLimit = in.readDouble();
             engineeringUnits = ENGINEERING_UNITS_DEFAULT;
             chartColour = null;
-        }
-        else if (ver == 6) {
+        } else if (ver == 6) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -784,8 +775,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             discardHighLimit = in.readDouble();
             engineeringUnits = in.readInt();
             chartColour = null;
-        }
-        else if (ver == 7) {
+        } else if (ver == 7) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = null;
             enabled = in.readBoolean();
@@ -806,8 +796,7 @@ public class DataPointVO implements Serializable, Cloneable, JsonSerializable, C
             discardHighLimit = in.readDouble();
             engineeringUnits = in.readInt();
             chartColour = SerializationHelper.readSafeUTF(in);
-        }
-        else if (ver == 8) {
+        } else if (ver == 8) {
             name = SerializationHelper.readSafeUTF(in);
             deviceName = SerializationHelper.readSafeUTF(in);
             enabled = in.readBoolean();

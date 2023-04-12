@@ -2,7 +2,7 @@
     Mango - Open Source M2M - http://mango.serotoninsoftware.com
     Copyright (C) 2006-2011 Serotonin Software Technologies Inc.
     @author Matthew Lohbihler
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -18,6 +18,7 @@
 --%>
 <%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <%@page import="com.serotonin.mango.vo.DataPointVO"%>
+<%@page import="com.serotonin.mango.vo.IntervalLoggingTypes"%>
 <%@page import="com.serotonin.mango.DataTypes"%>
 
 <script type="text/javascript">
@@ -26,13 +27,13 @@
       var tolerance = $("tolerance");
       var purgePeriod = $("purgePeriod");
       var purgeType = $("purgeType");
-      
+
       if ($("toleranceSection") && loggingType == <%= DataPointVO.LoggingTypes.ON_CHANGE %>)
           // On change logging for a numeric requires a tolerance setting.
           tolerance.disabled = false;
       else
           tolerance.disabled = true;
-      
+
       if (loggingType == <%= DataPointVO.LoggingTypes.NONE %>) {
           purgePeriod.disabled = true;
           purgeType.disabled = true;
@@ -41,13 +42,13 @@
           purgePeriod.disabled = false;
           purgeType.disabled = false;
       }
-      
+
       if (loggingType == <%= DataPointVO.LoggingTypes.INTERVAL %>)
           show("intervalLoggingSection");
       else
           hide("intervalLoggingSection");
   }
-  
+
   function changeDiscard() {
       var discard = $get("discardExtremeValues");
       if (discard) {
@@ -59,14 +60,14 @@
           $("discardHighLimit").disabled = true;
       }
   }
-  
+
   function clearPointCache() {
       setDisabled("clearCacheBtn", true);
       DataPointEditDwr.clearPointCache(function() {
           setDisabled("clearCacheBtn", false);
       });
   }
-  
+
   dojo.addOnLoad(function() {
       if (dataTypeId == <%= DataTypes.NUMERIC %>) {
           show("toleranceSection");
@@ -87,7 +88,7 @@
       <span class="smallTitle"><fmt:message key="pointEdit.logging.props"/></span>
       <tag:help id="pointValueLogging"/>
     </td></tr>
-    
+
     <spring:bind path="form.loggingType">
       <tr>
         <td class="formLabelRequired"><fmt:message key="pointEdit.logging.type"/></td>
@@ -103,7 +104,7 @@
         <td class="formError">${status.errorMessage}</td>
       </tr>
     </spring:bind>
-    
+
     <tbody id="intervalLoggingSection" style="display:none;">
       <tr>
         <td class="formLabelRequired"><fmt:message key="pointEdit.logging.period"/></td>
@@ -120,7 +121,7 @@
           <spring:bind path="form.intervalLoggingPeriod">${status.errorMessage}</spring:bind>
         </td>
       </tr>
-      
+
       <spring:bind path="form.intervalLoggingType">
         <tr>
           <td class="formLabelRequired"><fmt:message key="pointEdit.logging.valueType"/></td>
@@ -136,7 +137,7 @@
         </tr>
       </spring:bind>
     </tbody>
-    
+
     <tbody id="toleranceSection" style="display:none;">
       <spring:bind path="form.tolerance">
         <tr>
@@ -148,7 +149,7 @@
         </tr>
       </spring:bind>
     </tbody>
-      
+
     <tbody id="discardSection" style="display:none;">
       <spring:bind path="form.discardExtremeValues">
         <tr>
@@ -179,7 +180,7 @@
         </tr>
       </spring:bind>
     </tbody>
-      
+
     <tr>
       <td class="formLabelRequired"><fmt:message key="pointEdit.logging.purge"/></td>
       <td class="formField">
@@ -195,7 +196,7 @@
         <spring:bind path="form.purgePeriod">${status.errorMessage}</spring:bind>
       </td>
     </tr>
-      
+
     <spring:bind path="form.defaultCacheSize">
       <tr>
         <td class="formLabelRequired"><fmt:message key="pointEdit.logging.defaultCache"/></td>
